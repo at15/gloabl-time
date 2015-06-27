@@ -5,6 +5,12 @@
     <title>Global time</title>
 </head>
 <body>
+
+<div>
+    <label for="change-time">Change utc time</label>
+    <input id="change-time" type="datetime-local" onchange="changeTime(this);"/>
+</div>
+
 <div>
     <h2>Time in China</h2>
 
@@ -22,28 +28,41 @@
 </div>
 <script>
 
+    function changeTime(ele) {
+        console.log(ele, ele.value);
+        var dt = new Date(ele.value);
+//        console.log(dt.toISOString());
+//        console.log(formatDateTime(dt));
+        renderAll(toUTC(dt));
+    }
+
     function renderTime(id, time) {
         document.getElementById(id).innerText = time;
     }
 
 
     function formatDateTime(dt) {
+//        console.log(dt.toISOString());
         return ((dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2');
     }
 
-    function renderAll(){
-        var currentTime = new Date();
-        var australiaTime = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
+    function renderAll(utcTime) {
+        var chinaTime = new Date(utcTime.getTime() + 8 * 60 * 60 * 1000);
+
+        var australiaTime = new Date(utcTime.getTime() + 10 * 60 * 60 * 1000);
         // 夏令时?... and 具体哪个部位也会有差别额...
-        var usTime = new Date(currentTime.getTime() - 15 * 60 * 60 * 1000);
-        renderTime('china-time', formatDateTime(currentTime));
+        var usTime = new Date(utcTime.getTime() - 7 * 60 * 60 * 1000);
+        renderTime('china-time', formatDateTime(chinaTime));
         renderTime('australia-time', formatDateTime(australiaTime));
         renderTime('us-time', formatDateTime(usTime));
     }
 
-    renderAll();
-    setInterval(renderAll,1000);
+    function toUTC(dt) {
+        return new Date(dt.getTime() + dt.getTimezoneOffset() * 60 * 1000);
+    }
 
+    renderAll(toUTC(new Date()));
+    //    setInterval(renderAll, 1000);
 
 
 </script>
