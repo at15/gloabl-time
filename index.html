@@ -5,6 +5,47 @@
     <title>Global time</title>
 </head>
 <body>
+<div>
+    <h2>Time in China</h2>
 
+    <h2 id="china-time"></h2>
+</div>
+<div>
+    <h2>Australia</h2>
+
+    <h2 id="australia-time"></h2>
+</div>
+<div>
+    <h2>US</h2>
+
+    <h2 id="us-time"></h2>
+</div>
+<script>
+
+    function renderTime(id, time) {
+        document.getElementById(id).innerText = time;
+    }
+
+
+    function formatDateTime(dt) {
+        return ((dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2');
+    }
+
+    function renderAll(){
+        var currentTime = new Date();
+        var australiaTime = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
+        // 夏令时?... and 具体哪个部位也会有差别额...
+        var usTime = new Date(currentTime.getTime() - 15 * 60 * 60 * 1000);
+        renderTime('china-time', formatDateTime(currentTime));
+        renderTime('australia-time', formatDateTime(australiaTime));
+        renderTime('us-time', formatDateTime(usTime));
+    }
+
+    renderAll();
+    setInterval(renderAll,1000);
+
+
+
+</script>
 </body>
 </html>
