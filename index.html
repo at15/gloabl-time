@@ -33,7 +33,7 @@
         var dt = new Date(ele.value);
 //        console.log(dt.toISOString());
 //        console.log(formatDateTime(dt));
-        renderAll(toUTC(dt));
+        renderAll(dt);
     }
 
     function renderTime(id, time) {
@@ -42,11 +42,16 @@
 
 
     function formatDateTime(dt) {
-//        console.log(dt.toISOString());
-        return ((dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2');
+        var weeks = [
+            'Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+        ];
+        return ((dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds())
+                        .replace(/([\-\: ])(\d{1})(?!\d)/g, '$10$2')
+                + ' ' + weeks[dt.getDay()];
     }
 
-    function renderAll(utcTime) {
+    function renderAll(dt) {
+        var utcTime = toUTC(dt);
         var chinaTime = new Date(utcTime.getTime() + 8 * 60 * 60 * 1000);
 
         var australiaTime = new Date(utcTime.getTime() + 10 * 60 * 60 * 1000);
@@ -61,7 +66,7 @@
         return new Date(dt.getTime() + dt.getTimezoneOffset() * 60 * 1000);
     }
 
-    renderAll(toUTC(new Date()));
+    renderAll(new Date());
     //    setInterval(renderAll, 1000);
 
 
